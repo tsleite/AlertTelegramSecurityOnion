@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# PROGRAMA ALERTA PARA TELEGRAM
+# Versão:1.0.2
+# Criado por Tiago Silva Leite
+# tleite@bsd.com.br
+
+
+case $1 in
+	--sensor)
+	SENSOR="$2";;					# Nome Sensor
+	*)
+	echo "[ Usage ] ./<nome_programa> --sensor <nome_sensor>";
+	exit;;
+esac
+
+DIR="/opt/telegram/cloudtechnology"			# Diretório do programa para o alerta
+HIGH="/opt/telegram/report/high.sh"			# Diretório das querys de severidade alta
+MEDIUM="/opt/telegram/report/medium.sh"			# Diretório das querys de severidade média
+LOW="/opt/telegram/report/low.sh"			# Diretório das querys de severidade baixa
+LOG="$DIR/result.txt"					# Arquivo onde guarda as informações coletadas para serem enviadas via bot do telegram
+CONF="$DIR/telegram.conf"				# Arquivo de configuração para o ID do grupo
+STH="$DIR/sth.txt"					# Arquivo onde guarda o estado da severidade alta na condição do programa
+STM="$DIR/stm.txt"					# Arquivo onde guarda o estado da severidade média na condição do programa
+STL="$DIR/stl.txt"					# Arquivo onde guarda o estado da severidade baixa na condição do programa
+VSTH=$( cat $STH )					# Variável para verificação do estado alto
+VSTM=$( cat $STM )					# Variável para verificação do estado médio
+VSTL=$( cat $STL )					# Variável para verificação do estado baixo
+ATUAL_HIGH=$($HIGH count $SENSOR)			# Variável verifica a contagem do evento/alerta de severidade alta
+ATUAL_MEDIUM=$($MEDIUM count $SENSOR)			# Variável verifica a contagem do evento/alerta de severidade média
+ATUAL_LOW=$($LOW count $SENSOR)				# Variável verifica a contagem do evento/alerta de severidade baixa
+ATUAL_H_VAZIO=$($HIGH ip_src $SENSOR)			# Variável verifica o valor de retorno de severidade alta( criado para realizar condição )
+ATUAL_M_VAZIO=$($MEDIUM ip_src $SENSOR)			# Variável verifica o valor de retorno de severidade média( criado para realizar condição )
+ATUAL_L_VAZIO=$($LOW ip_src $SENSOR)			# Variável verifica o valor de retorno de severidade baixa( criado para realizar condição )
+ATUAL_H_SENSOR=$($HIGH sensor $SENSOR)                  # Variavel verifica o valor de retorno do nome do sensor
+ATUAL_M_SENSOR=$($MEDIUM sensor $SENSOR)                # Variavel verifica o valor de retorno do nome do sensor
+ATUAL_L_SENSOR=$($LOW sensor $SENSOR)                   # Variavel verifica o valor de retorno do nome do sensor
+
+
+###  SEVERITY HIGH -------------------------------------------------------------------------------------------------------------------------------
+$HIGH count $SENSOR > $STH
+
+if [ {$ATUAL_HIGH} != {$VSTH} ] && [ ! -z "$ATUAL_H_VAZIO" ] && [ ! -z "$ATUAL_H_SENSOR"  ] ;then
+
+#echo  "*Total Events:* $($HIGH count $SENSOR)"  > $LOG
+echo  "*Name Sensor:*  $($HIGH sensor $SENSOR)" > $LOG
+echo  "*Source IP:*   $($HIGH ip_src $SENSOR)" >> $LOG
+echo  "*Source Port:* $($HIGH port_src $SENSOR)" >> $LOG
+echo  "*Destination IP:* $($HIGH ip_dst $SENSOR)"  >> $LOG
+echo  "*Destination Port:* $($HIGH port_dst $SENSOR)" >> $LOG
+echo  "*Signature:* $($HIGH signature $SENSOR |sed 's,_, ,g' |sed 's,*, ,g')" >> $LOG
+echo  "*ID Alert:* $($HIGH id_signature $SENSOR)"  >> $LOG
+echo  "*Timestamp:* $($HIGH date_event $SENSOR)" >> $LOG
+
+telegram-notify --silent --config $CONF --error --title "[ ODIN SIEM REPORT - SEVERITY HIGH ]"  --text $LOG  > /dev/null 2>&1
+fi
+
+
+
+###  SEVERITY MEDIUM -------------------------------------------------------------------------------------------------------------------------------
+$MEDIUM count $SENSOR > $STM
+
+if [ {$ATUAL_MEDIUM} != {$VSTM} ] && [ ! -z "$ATUAL_M_VAZIO" ] && [ ! -z "$ATUAL_M_SENSOR"  ];then
+
+#echo  "*Total Events:* $($MEDIUM count $SENSOR)"  > $LOG
+echo  "*Name Sensor:*  $($MEDIUM sensor $SENSOR)" > $LOG
+echo  "*Source IP:*   $($MEDIUM ip_src $SENSOR)" >> $LOG
+echo  "*Source Port:* $($MEDIUM port_src $SENSOR)" >> $LOG
+echo  "*Destination IP:* $($MEDIUM ip_dst $SENSOR)"  >> $LOG
+echo  "*Destination Port:* $($MEDIUM port_dst $SENSOR)" >> $LOG
+echo  "*Signature:* $($MEDIUM signature $SENSOR |sed 's,_, ,g' |sed 's,*, ,g')" >> $LOG
+echo  "*ID Alert:* $($MEDIUM id_signature $SENSOR)"  >> $LOG
+echo  "*Timestamp:* $($MEDIUM date_event $SENSOR)" >> $LOG
+
+telegram-notify --silent --config $CONF --warning --title "[ ODIN SIEM REPORT - SEVERITY MEDIUM ]"  --text $LOG  > /dev/null 2>&1
+fi
+
+
+
+###  SEVERITY LOW ----------------------------------------------------------------------------------------------------------------------------------
+$LOW count $SENSOR > $STL
+
+if [ {$ATUAL_LOW} != {$VSTL} ] && [ ! -z "$ATUAL_L_VAZIO" ] && [ ! -z "$ATUAL_L_SENSOR"   ];then
+
+#echo  "*Total Events:* $($LOW count $SENSOR)"  > $LOG
+echo  "*Name Sensor:*  $($LOW sensor $SENSOR)" > $LOG
+echo  "*Source IP:*   $($LOW ip_src $SENSOR)" >> $LOG
+echo  "*Source Port:* $($LOW port_src $SENSOR)" >> $LOG
+echo  "*Destination IP:* $($LOW ip_dst $SENSOR)"  >> $LOG
+echo  "*Destination Port:* $($LOW port_dst $SENSOR)" >> $LOG
+echo  "*Signature:* $($LOW signature $SENSOR |sed 's,_, ,g'| sed 's,*, ,g')" >> $LOG
+echo  "*ID Alert:* $($LOW id_signature $SENSOR)"  >> $LOG
+echo  "*Timestamp:* $($LOW date_event $SENSOR)" >> $LOG
+
+telegram-notify --silent --config $CONF --success --title "[ ODIN SIEM REPORT - SEVERITY LOW ]"  --text $LOG  > /dev/null 2>&1
+fi

@@ -1,0 +1,10 @@
+count
+sensor
+ip_src
+port_src
+ip_dst
+port_dst
+signature
+id_signature
+id_alert
+date_event

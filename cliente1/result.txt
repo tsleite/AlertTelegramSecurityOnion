@@ -1,8 +1,8 @@
 *Name Sensor:*  XXXXXXX
-*Source IP:*   10.XX.10.XXX
+*Source IP:*   10.XX.xx.XXX
 *Source Port:* 55480
-*Destination IP:* 213.44.59.XXX
+*Destination IP:* xx.44.59.XXX
 *Destination Port:* 80
 *Signature:* ET INFO DYNAMIC DNS HTTP Request to a  .dyndns.  domain
 *ID Alert:* 20130XX
-*Timestamp:* 2018-10-24 20:29:39
+*Timestamp:* 2018-xx-24 20:xx:39

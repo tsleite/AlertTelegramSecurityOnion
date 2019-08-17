@@ -4,7 +4,7 @@ Esse pequeno programa foi desenvolvido para realizar buscas de vulnerabilidades,
 Solução: Security Onion 
 Versão: 16.04
 
-Programa criado por: Tiago
+Tiago Silva
 Contato: tleite@bsd.com.br
 
 -> Baixar e colocar os arquivos em um diretório de preferência.

@@ -52,7 +52,7 @@ echo  "*Signature:* $($HIGH signature $SENSOR |sed 's,_, ,g' |sed 's,*, ,g')" >>
 echo  "*ID Alert:* $($HIGH id_signature $SENSOR)"  >> $LOG
 echo  "*Timestamp:* $($HIGH date_event $SENSOR)" >> $LOG
 
-telegram-notify --silent --config $CONF --error --title "[ ODIN SIEM REPORT - SEVERITY HIGH ]"  --text $LOG  > /dev/null 2>&1
+telegram-notify --silent --config $CONF --error --title "[ REPORT - SEVERITY HIGH ]"  --text $LOG  > /dev/null 2>&1
 fi
 
 
@@ -72,7 +72,7 @@ echo  "*Signature:* $($MEDIUM signature $SENSOR |sed 's,_, ,g' |sed 's,*, ,g')" 
 echo  "*ID Alert:* $($MEDIUM id_signature $SENSOR)"  >> $LOG
 echo  "*Timestamp:* $($MEDIUM date_event $SENSOR)" >> $LOG
 
-telegram-notify --silent --config $CONF --warning --title "[ ODIN SIEM REPORT - SEVERITY MEDIUM ]"  --text $LOG  > /dev/null 2>&1
+telegram-notify --silent --config $CONF --warning --title "[ REPORT - SEVERITY MEDIUM ]"  --text $LOG  > /dev/null 2>&1
 fi
 
 
@@ -92,5 +92,5 @@ echo  "*Signature:* $($LOW signature $SENSOR |sed 's,_, ,g'| sed 's,*, ,g')" >> 
 echo  "*ID Alert:* $($LOW id_signature $SENSOR)"  >> $LOG
 echo  "*Timestamp:* $($LOW date_event $SENSOR)" >> $LOG
 
-telegram-notify --silent --config $CONF --success --title "[ ODIN SIEM REPORT - SEVERITY LOW ]"  --text $LOG  > /dev/null 2>&1
+telegram-notify --silent --config $CONF --success --title "[ REPORT - SEVERITY LOW ]"  --text $LOG  > /dev/null 2>&1
 fi

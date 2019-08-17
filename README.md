@@ -1,8 +1,8 @@
 # AlertTelegramSecurityOnion
 Esse pequeno programa foi desenvolvido para realizar buscas de vulnerabilidades, mediante a base de dados já coletados.
 
-Solução utilizada: Security Onion 
-Versão utilizada: 16.04
+Solução: Security Onion 
+Versão: 16.04
 
 Programa criado por: Tiago
 Contato: tleite@bsd.com.br

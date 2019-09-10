@@ -14,7 +14,7 @@ case $1 in
 	exit;;
 esac
 
-DIR="/opt/telegram/cloudtechnology"			# Diretório do programa para o alerta
+DIR="/opt/telegram/xxxXXXXXX"			# Diretório do programa para o alerta
 HIGH="/opt/telegram/report/high.sh"			# Diretório das querys de severidade alta
 MEDIUM="/opt/telegram/report/medium.sh"			# Diretório das querys de severidade média
 LOW="/opt/telegram/report/low.sh"			# Diretório das querys de severidade baixa
